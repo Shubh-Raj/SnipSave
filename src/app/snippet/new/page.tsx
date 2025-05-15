@@ -19,7 +19,7 @@ const CreateSnippetPage = () => {
                 code
             }
         });
-        console.log("created snippet: ", snippet);
+        console.log("created snippet: ", snippet); //server side prints in console
         redirect("/");
     }
 
