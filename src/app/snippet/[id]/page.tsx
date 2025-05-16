@@ -11,6 +11,7 @@ type SnippetDetailsProps = {
 
 const SnippetDetailPage: React.FC<SnippetDetailsProps> = async ({ params }) => {
     const id = parseInt((await params).id);
+    await new Promise((r) => setTimeout(r,2000));
 
     const snippet = await prisma.snippet.findUnique({
         where: {
