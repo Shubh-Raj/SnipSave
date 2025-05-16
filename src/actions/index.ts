@@ -1,5 +1,5 @@
 "use server"
-
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation";
 
@@ -19,6 +19,7 @@ export const deleteSnippet = async (id: number) => {
     await prisma.snippet.delete({
         where: { id }
     });
+    revalidatePath("/");
     redirect("/");
 }
 
@@ -41,9 +42,15 @@ export async function createSnippet(prevState: { message: string }, formData: Fo
                 code
             }
         });
-        throw new Error("Oops something went wrong");
-    } catch (error: any) {
-        return { message: error.message }
+        revalidatePath("/");
+        // throw new Error("Oops something went wrong");
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            return { message: error.message }
+        }
+        else {
+            return { message: "Some internal server error" }
+        }
     }
     redirect("/");
 }
